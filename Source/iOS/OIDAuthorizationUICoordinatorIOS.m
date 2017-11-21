@@ -87,28 +87,32 @@ static id<OIDSafariViewControllerFactory> __nullable gSafariViewControllerFactor
   _session = session;
   BOOL openedSafari = NO;
   NSURL *requestURL = [request authorizationRequestURL];
-
-  if (@available(iOS 11.0, *)) {
-    NSString *redirectScheme = request.redirectURL.scheme;
-    SFAuthenticationSession* authenticationVC =
-        [[SFAuthenticationSession alloc] initWithURL:requestURL
-                                   callbackURLScheme:redirectScheme
-                                   completionHandler:^(NSURL * _Nullable callbackURL,
-                                                       NSError * _Nullable error) {
-      _authenticationVC = nil;
-      if (callbackURL) {
-        [_session resumeAuthorizationFlowWithURL:callbackURL];
-      } else {
-        NSError *safariError =
-            [OIDErrorUtilities errorWithCode:OIDErrorCodeUserCanceledAuthorizationFlow
-                             underlyingError:error
-                                 description:nil];
-        [_session failAuthorizationFlowWithError:safariError];
-      }
-    }];
-    _authenticationVC = authenticationVC;
-    openedSafari = [authenticationVC start];
-  } else if (@available(iOS 9.0, *)) {
+    
+    
+// Removed to force use of SFSafariViewController aposed to SFAuthenticationSession even on iOS 11+
+    
+//  if (@available(iOS 11.0, *)) {
+//    NSString *redirectScheme = request.redirectURL.scheme;
+//    SFAuthenticationSession* authenticationVC =
+//        [[SFAuthenticationSession alloc] initWithURL:requestURL
+//                                   callbackURLScheme:redirectScheme
+//                                   completionHandler:^(NSURL * _Nullable callbackURL,
+//                                                       NSError * _Nullable error) {
+//      _authenticationVC = nil;
+//      if (callbackURL) {
+//        [_session resumeAuthorizationFlowWithURL:callbackURL];
+//      } else {
+//        NSError *safariError =
+//            [OIDErrorUtilities errorWithCode:OIDErrorCodeUserCanceledAuthorizationFlow
+//                             underlyingError:error
+//                                 description:nil];
+//        [_session failAuthorizationFlowWithError:safariError];
+//      }
+//    }];
+//    _authenticationVC = authenticationVC;
+//    openedSafari = [authenticationVC start];
+//  } else
+      if (@available(iOS 9.0, *)) {
       SFSafariViewController *safariVC =
           [[[self class] safariViewControllerFactory] safariViewControllerWithURL:requestURL];
       safariVC.delegate = self;
@@ -138,15 +142,20 @@ static id<OIDSafariViewControllerFactory> __nullable gSafariViewControllerFactor
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wpartial-availability"
   SFSafariViewController *safariVC = _safariVC;
-  SFAuthenticationSession *authenticationVC = _authenticationVC;
+
+  //SFAuthenticationSession *authenticationVC = _authenticationVC;
 #pragma clang diagnostic pop
   
   [self cleanUp];
   
-  if (@available(iOS 11.0, *)) {
-    [authenticationVC cancel];
-    if (completion) completion();
-  } else if (@available(iOS 9.0, *)) {
+// Removed to force use of SFSafariViewController aposed to SFAuthenticationSession even on iOS 11+
+    
+//  if (@available(iOS 11.0, *)) {
+//    [authenticationVC cancel];
+//    if (completion) completion();
+//  } else
+    
+      if (@available(iOS 9.0, *)) {
     if (safariVC) {
       [safariVC dismissViewControllerAnimated:YES completion:completion];
     } else {
