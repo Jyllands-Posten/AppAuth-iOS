@@ -1,3 +1,7 @@
+# Forces use of SFSafariViewController even when SFAuthenticationSession is avalible. 
+## The reason is to avoid confusing "login" warning when logging out.
+
+
 ![AppAuth for iOS and macOS](https://rawgit.com/openid/AppAuth-iOS/master/appauth_lockup.svg)
 [![Build Status](https://travis-ci.org/openid/AppAuth-iOS.svg?branch=master)](https://travis-ci.org/openid/AppAuth-iOS)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
